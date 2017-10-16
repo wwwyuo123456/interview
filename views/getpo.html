@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src='https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js'></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cOLcAjkcjXYGfoilx7EYjaVYXB7GMzMb"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+    <script type="text/javascript" src="/lib/MarkerClusterer.js"></script>
+    <script type="text/javascript" src="/lib/LuShu.js"></script>
+	<!-- <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>   -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        html{height:100%;}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>   
+    <div style="position:absolute;right:10%;top:10%;z-index:100;">
+            
+        <div class="form-inline">
+            <input id="comname" type="text" class="form-control" placeholder="公司名称" value="">
+            <button id="sousuo" class="btn btn-primary">搜索 <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            <button id="adds" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加</button>
+            <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                         菜单
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                            <li><a href="#" id="showall">加载所有公司</a></li>
+                            <li><a href="#" id="clearall">清除所有公司</a></li>
+                            <li><a href="#" id="showself">显示本公司</a></li>
+                            <li><a href="#" id="clearluxian">清除规划路线</a></li>
+                    </ul>
+                    <!-- <ul class="bg-danger" style="position:absolute;">
+                        <li><a href="#" id="showall">showAll</a></li>
+                        <li><a href="#" id="clearall">clearAll</a></li>
+                    </ul> -->
+            </div>
+            
+        </div>     
+    </div>
+    <div id="container"></div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">添加公司</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">公司名称</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="name" placeholder="上海慧物科技有限公司">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">公司地址</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="adress" placeholder="上海市普陀区中山北路3663号华东师范大学干训楼2楼">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">公司图片</label>
+                        <div class="col-sm-9">
+                            <input type="file" id="icon">
+                        </div>
+                      </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">公司简介</label>
+                        <div class="col-sm-9">
+                          <textarea class="form-control" rows="3"  id="profile" placeholder="..."></textarea>
+                        </div>
+                    </div>
+                    
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button  class="btn btn-primary addone"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="/lib/loadMap.js"></script>
+    <script type="text/javascript">
+            
+        $.getJSON("/getpoint",function(data){
+            var map = new BMap.Map('container');
+            var devmap = new LoadMaps.DevMap(map,{
+                city:"杭州"
+            });
+            
+            
+            document.onkeydown=function(event){
+              var e = event || window.event || arguments.callee.caller.arguments[0];      
+              if(e && e.keyCode==13){ // enter 键
+                var comname = $("#comname").val();
+                devmap.lookupmarker(comname);
+              }
+            }; 
+            $("#showall").click(function(){
+                // console.log(data["list"]);
+                devmap.showAllMarker(data["data"]);
+            });
+            $("#clearall").click(function(){
+                devmap.clearAllMarker();
+            });
+            $("#sousuo").click(function(){
+                var comname = $("#comname").val();
+                var isshow = devmap.lookupmarker(comname);
+            });
+            $("#showself").click(function(){
+                devmap.showMarker(data['data'][0]);
+                console.log();
+            });
+            $("#clearluxian").click(function(){
+                devmap.clearluxian();
+            });
+            
+            $("#adds").click(function(){
+                $('#myModal').modal("show"); 
+                $(".addone").click(function(){
+                    devmap.addmarker({
+                        name:$("#name").val(),
+                        address:$("#adress").val(),
+                        profile:$("#profile").val(),
+                        iconurl:undefined
+                    });
+                    $('#myModal').modal("hide");             
+                });
+            });
+
+            
+        });
+        
+    </script>
+    <div id="jsscript"></div>
+</body>
+</html>

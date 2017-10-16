@@ -1,0 +1,48 @@
+{
+    "uid":"000001",
+    "name":"上海慧物有限公司",
+    "ishide":"false",
+    "havedelmenu":"true",
+    "point":{  
+        "lng": "116.39564504",  
+        "lat": "39.92998578" 
+    }, 
+    "address":{  
+        "city": "北京市",           
+        "city_code": 131,        
+        "district": "",         
+        "province": "北京市",    
+        "street": "",           
+        "street_number": ""  
+    },
+     
+    "win":{
+        "wintitle":"title",
+        "wincontent":"<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-xs-4\" ><img src=\"/public/imgs/pon3.png\" onclick='img()' class=\"img-responsive\" style=\"width:70px;height:60px\" alt=\"头像\"></div><div class=\"col-xs-8\"><h5>吉他教学</h5><p>100/小时</p></div></div></div>"
+    },
+    "dot":{
+        "icon":"/public/imgs/pon.png",
+        "style":"",
+        "tip":"",
+        "width":"50",
+        "height":"50"
+    },
+    "menu":
+    {
+        "textcolor":"",
+        "backgroundcolor":"",
+        "menuitmes":[
+            {
+                "name":"编辑",
+                "icon":"",               
+                "action":"hello"
+            },
+            {
+                "name":"删除",
+                "icon":"",               
+                "action":"hello"
+            }
+        ]
+    }
+
+}
