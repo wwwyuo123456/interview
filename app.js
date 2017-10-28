@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const sever = http.createServer();
 const data = require('./lib/propoints.js');
-console.log(data);
+
  
 sever.on('request',function(req,res){
    
